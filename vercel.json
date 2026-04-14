@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/admin/ppsk/check-expiry",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
