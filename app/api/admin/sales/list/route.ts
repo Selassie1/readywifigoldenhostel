@@ -59,7 +59,12 @@ export async function GET(request: NextRequest) {
       },
     ]);
 
-    const summary = stats[0] || {
+    const summary = stats[0] ? {
+      totalSales: stats[0].totalSales || 0,
+      totalRevenue: Number((stats[0].totalRevenue || 0).toFixed(2)),
+      paidSales: stats[0].paidSales || 0,
+      paidRevenue: Number((stats[0].paidRevenue || 0).toFixed(2)),
+    } : {
       totalSales: 0,
       totalRevenue: 0,
       paidSales: 0,
@@ -80,7 +85,7 @@ export async function GET(request: NextRequest) {
     
     const revenueByPlan = revenueByPlanStats.map(item => ({
       name: item._id ? item._id.charAt(0).toUpperCase() + item._id.slice(1) : "Unknown",
-      value: item.value
+      value: Number((item.value || 0).toFixed(2))
     }));
 
     // 2. Weekly Sales (Last 7 days)

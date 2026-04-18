@@ -23,6 +23,8 @@ export default function VoucherUploadPage() {
 
   // To add a new plan later, add an entry to this array.
   const plans = [
+    { id: "basic",     name: "Basic",     data: "30GB",      duration: "30 Days" },
+    { id: "pro",       name: "Pro",       data: "95GB",      duration: "30 Days" },
     { id: "unlimited", name: "Unlimited", data: "Unlimited", duration: "30 Days" },
   ];
 

@@ -199,7 +199,7 @@ export async function GET(request: NextRequest) {
         finalSale.ppskPassword = ppsk.password;
         console.log("✅ PPSK assigned:", ppsk.password);
 
-        // Telegram Notification
+        // Telegram Notification (with PPSK)
         await sendTelegramMessage(
           `🛒 *New Purchase*\n\n` +
             `📱 *Phone:* \`${finalSale.phone}\`\n` +
@@ -213,6 +213,17 @@ export async function GET(request: NextRequest) {
       } else {
         console.warn("⚠️ No PPSK passwords available — TV access skipped");
       }
+    } else if (!includesTvAccess && finalSale.voucherCode) {
+      // Telegram Notification (voucher-only plans: Basic, Pro)
+      await sendTelegramMessage(
+        `🛒 *New Purchase*\n\n` +
+          `📱 *Phone:* \`${finalSale.phone}\`\n` +
+          `📦 *Plan:* ${finalSale.plan}\n` +
+          `💵 *Amount:* GHS ${finalSale.amount}\n` +
+          `\n🎫 *Voucher Code:* \`${finalSale.voucherCode}\`\n` +
+          `\n🔗 *Ref:* \`${finalSale.paymentRef}\`\n` +
+          `📍 *Channel:* ${finalSale.channel}`
+      );
     }
 
     // Send SMS with voucher code (and PPSK if available)
@@ -326,11 +337,15 @@ async function assignVoucherToSale(sale: any, metadata: any) {
     // Map plan names to our database plan names.
     // To add a new plan later, add its id here as both key and value.
     const planMapping: { [key: string]: string } = {
+      "basic plan": "basic",
+      basic: "basic",
+      "pro plan": "pro",
+      pro: "pro",
       "unlimited plan": "unlimited",
       unlimited: "unlimited",
     };
 
-    const dbPlanName = planMapping[planName] || "unlimited";
+    const dbPlanName = planMapping[planName] || planName;
 
     console.log("🔍 Looking for voucher for plan:", dbPlanName);
 

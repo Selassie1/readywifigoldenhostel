@@ -33,6 +33,30 @@ export async function GET() {
     // Set includes_tv_access: true on any plan that should also assign a PPSK.
     const PLANS_CONFIG = [
       {
+        id: "basic",
+        name: "Basic",
+        duration: "30 Days",
+        price: 50,
+        data: "30GB",
+        description: "Reliable internet for everyday browsing and streaming",
+        speed: "50Mbps",
+        devices: "Up to 2 devices",
+        popular: false,
+        includes_tv_access: false,
+      },
+      {
+        id: "pro",
+        name: "Pro",
+        duration: "30 Days",
+        price: 150,
+        data: "95GB",
+        description: "High-speed internet for heavy users and remote workers",
+        speed: "50Mbps",
+        devices: "Up to 2 devices",
+        popular: true,
+        includes_tv_access: false,
+      },
+      {
         id: "unlimited",
         name: "Unlimited",
         duration: "30 Days",
@@ -41,7 +65,7 @@ export async function GET() {
         description: "Unlimited high-speed internet for your home or business",
         speed: "100Mbps",
         devices: "Up to 3 devices",
-        popular: true,
+        popular: false,
         includes_tv_access: true,   // also assigns a PPSK password on purchase
       },
     ];

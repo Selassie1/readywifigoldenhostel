@@ -15,6 +15,24 @@ import { initializeTransaction } from "@/lib/paystack";
 // The key must match the plan id used when uploading vouchers.
 // Set includes_tv_access: true on any plan that should also assign a PPSK.
 const PLANS = {
+  basic: {
+    name: "Basic",
+    duration: "30 Days",
+    price: 50,
+    data: "30GB",
+    speed: "50Mbps",
+    devices: "Up to 2 devices",
+    includes_tv_access: false,
+  },
+  pro: {
+    name: "Pro",
+    duration: "30 Days",
+    price: 150,
+    data: "95GB",
+    speed: "50Mbps",
+    devices: "Up to 2 devices",
+    includes_tv_access: false,
+  },
   unlimited: {
     name: "Unlimited",
     duration: "30 Days",

@@ -10,6 +10,22 @@ import { chargeMobileMoney } from "@/lib/paystack";
 // ── Plan Catalogue ─────────────────────────────────────────────────────────
 // To add a new plan: add another key here and update the menu strings below.
 const PLANS = {
+  basic: {
+    name: "Basic",
+    duration: "30 Days",
+    price: 50,
+    data: "30GB",
+    speed: "50Mbps",
+    devices: "2 devices",
+  },
+  pro: {
+    name: "Pro",
+    duration: "30 Days",
+    price: 150,
+    data: "95GB",
+    speed: "50Mbps",
+    devices: "2 devices",
+  },
   unlimited: {
     name: "Unlimited",
     duration: "30 Days",
@@ -59,8 +75,10 @@ export async function POST(request: NextRequest) {
         if (input[input.length - 1] === "1") {
           response = `Choose plan:
 
-1. Unlimited – Unlimited – GHS 300
-2. Back`;
+1. Basic – 30GB – GHS 50
+2. Pro – 95GB – GHS 150
+3. Unlimited – Unlimited – GHS 300
+4. Back`;
           session.state = "plan_selection";
         } else if (input[input.length - 1] === "2") {
           response = `Enter your voucher code:`;
@@ -77,18 +95,23 @@ export async function POST(request: NextRequest) {
         }
         break;
 
-      case "plan_selection":
+      case "plan_selection": {
         const planChoice = input[input.length - 1];
-        if (planChoice === "2") {
+        const planMap: Record<string, keyof typeof PLANS> = {
+          "1": "basic",
+          "2": "pro",
+          "3": "unlimited",
+        };
+        if (planChoice === "4") {
           response = `Welcome to ReadyWifi.
 
 1. Buy Internet
 2. Check Voucher Status
 3. Exit`;
           session.state = "main_menu";
-        } else if (planChoice === "1") {
-          const selectedPlan = "unlimited";
-          const plan = PLANS[selectedPlan as keyof typeof PLANS];
+        } else if (planMap[planChoice]) {
+          const selectedPlan = planMap[planChoice];
+          const plan = PLANS[selectedPlan];
 
           session.chosenPlan = selectedPlan;
           response = `${plan.name} – ${plan.data} – GHS ${plan.price}
@@ -101,18 +124,23 @@ Devices: ${plan.devices}
         } else {
           response = `Invalid option. Please try again.
 
-1. Unlimited – Unlimited – GHS 300
-2. Back`;
+1. Basic – 30GB – GHS 50
+2. Pro – 95GB – GHS 150
+3. Unlimited – Unlimited – GHS 300
+4. Back`;
         }
         break;
+      }
 
-      case "plan_confirmation":
+      case "plan_confirmation": {
         const confirmChoice = input[input.length - 1];
         if (confirmChoice === "2") {
           response = `Choose plan:
 
-1. Unlimited – Unlimited – GHS 300
-2. Back`;
+1. Basic – 30GB – GHS 50
+2. Pro – 95GB – GHS 150
+3. Unlimited – Unlimited – GHS 300
+4. Back`;
           session.state = "plan_selection";
         } else if (confirmChoice === "1") {
           // Check stock availability
@@ -126,8 +154,10 @@ Devices: ${plan.devices}
               PLANS[session.chosenPlan as keyof typeof PLANS].name
             } plan is currently out of stock. Please try again later.
 
-1. Unlimited – Unlimited – GHS 300
-2. Back`;
+1. Basic – 30GB – GHS 50
+2. Pro – 95GB – GHS 150
+3. Unlimited – Unlimited – GHS 300
+4. Back`;
             session.state = "plan_selection";
           } else {
             // Create sale and initiate payment
@@ -180,6 +210,7 @@ You'll get an SMS with your access code after payment.`;
 2. Back`;
         }
         break;
+      }
 
       case "voucher_check":
         const voucherCode = input[input.length - 1];

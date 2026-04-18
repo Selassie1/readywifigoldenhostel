@@ -133,6 +133,8 @@ export default function SalesListPage() {
   const getPlanName = (plan: string) => {
     // To add a new plan later, add its id → display name mapping here.
     const plans: Record<string, string> = {
+      basic: "Basic",
+      pro: "Pro",
       unlimited: "Unlimited",
     };
     return plans[plan] || plan;
@@ -309,8 +311,10 @@ export default function SalesListPage() {
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[
-                    { id: "", name: "All Plans", data: "All" },
-                    { id: "unlimited", name: "Unlimited", data: "Unlimited" },
+                    { id: "",          name: "All Plans",  data: "All" },
+                    { id: "basic",     name: "Basic",      data: "30GB" },
+                    { id: "pro",       name: "Pro",        data: "95GB" },
+                    { id: "unlimited", name: "Unlimited",  data: "Unlimited" },
                   ].map((plan) => (
                     <button
                       key={plan.id}

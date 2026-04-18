@@ -187,8 +187,9 @@ export default function AdminDashboard() {
       const result = await response.json();
 
       if (result.success) {
+        const ppskDetail = result.data.ppskPassword ? `\nPPSK Code: ${result.data.ppskPassword}` : "";
         setModalMessage(
-          `Payment verified successfully!\nVoucher Code: ${result.data.voucherCode}\nPlan: ${result.data.plan}\nAmount: GHS ${result.data.amount}`
+          `Payment verified successfully!\nVoucher Code: ${result.data.voucherCode}${ppskDetail}\nPlan: ${result.data.plan}\nAmount: GHS ${(result.data.amount || 0).toFixed(2)}`
         );
         setShowSuccess(true);
         setPaymentRef("");
@@ -361,7 +362,7 @@ export default function AdminDashboard() {
               </div>
               <div className="text-right">
                 <p className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  GHS {stats?.paidRevenue || 0}
+                  GHS {(stats?.paidRevenue || 0).toFixed(2)}
                 </p>
                 <p className="text-xs text-slate-400">Revenue</p>
               </div>
@@ -616,7 +617,7 @@ export default function AdminDashboard() {
                 {stats?.soldVouchers || 0} vouchers sold today
               </p>
               <p className="text-xs text-slate-500">
-                Revenue: GHS {stats?.paidRevenue || 0}
+                Revenue: GHS {(stats?.paidRevenue || 0).toFixed(2)}
               </p>
             </div>
 

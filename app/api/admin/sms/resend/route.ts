@@ -33,8 +33,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (sale.status !== "paid") {
-      return NextResponse.json({ error: "Sale is not paid" }, { status: 400 });
+    if (sale.status !== "paid" && sale.status !== "completed") {
+      return NextResponse.json({ error: "Sale is not completed" }, { status: 400 });
     }
 
     // Send SMS

@@ -2,11 +2,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Voucher from "@/models/Voucher";
-import Sale from "@/models/Sale";
+import Sales from "@/models/Sale";
 import Batch from "@/models/Batch";
 import SmsLog from "@/models/SmsLog";
 import UssdSession from "@/models/UssdSession";
 import AuditLog from "@/models/AuditLog";
+import PpskPassword from "@/models/PpskPassword";
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -14,11 +15,12 @@ export async function DELETE(request: NextRequest) {
 
     // Clear all collections
     await Voucher.deleteMany({});
-    await Sale.deleteMany({});
+    await Sales.deleteMany({});
     await Batch.deleteMany({});
     await SmsLog.deleteMany({});
     await UssdSession.deleteMany({});
     await AuditLog.deleteMany({});
+    await PpskPassword.deleteMany({});
 
     return NextResponse.json({
       success: true,

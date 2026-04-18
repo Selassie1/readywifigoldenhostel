@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     // Validate plan.
     // To add a new plan later, add its id to this array.
-    const validPlans = ["unlimited"];
+    const validPlans = ["basic", "pro", "unlimited"];
     if (!validPlans.includes(plan)) {
       return NextResponse.json(
         { error: "Invalid plan selected" },
