@@ -38,12 +38,25 @@ const PLANS = {
 // ────────────────────────────────────────────────────────────────────────────
 
 
+// Africa's Talking requires plain-text responses prefixed with CON (continue) or END
+function ussdResponse(text: string, isEnd: boolean): NextResponse {
+  const prefix = isEnd ? "END" : "CON";
+  return new NextResponse(`${prefix} ${text}`, {
+    status: 200,
+    headers: { "Content-Type": "text/plain" },
+  });
+}
+
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    const body = await request.json();
-    const { sessionId, phoneNumber, serviceCode, text } = body;
+    // Africa's Talking sends form-urlencoded, NOT JSON
+    const formData = await request.formData();
+    const sessionId   = formData.get("sessionId")   as string;
+    const phoneNumber = formData.get("phoneNumber")  as string;
+    const serviceCode = formData.get("serviceCode")  as string;
+    const text        = (formData.get("text") as string) ?? "";
 
     const phone = formatPhoneNumber(phoneNumber);
     const input = text ? text.split("*") : [];
@@ -275,18 +288,9 @@ You'll get an SMS with your access code after payment.`;
     session.updatedAt = new Date();
     await session.save();
 
-    return NextResponse.json({
-      response: response,
-      continue: session.state !== "end",
-    });
+    return ussdResponse(response, session.state === "end");
   } catch (error) {
     console.error("USSD error:", error);
-    return NextResponse.json(
-      {
-        response: "An error occurred. Please try again later.",
-        continue: false,
-      },
-      { status: 500 }
-    );
+    return ussdResponse("An error occurred. Please try again later.", true);
   }
 }
