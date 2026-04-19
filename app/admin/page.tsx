@@ -233,419 +233,172 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-20 h-20 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-            <Shield className="h-10 w-10 text-white" />
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-deep)" }}>
+        <div className="fixed inset-0 mesh-grid opacity-20 pointer-events-none" />
+        <div className="relative z-10 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-violet-500/30">
+            <Shield className="h-8 w-8 text-white" />
           </div>
-          <div className="animate-spin rounded-full h-8 w-8 border-4 border-cyan-500/30 border-t-cyan-500 mx-auto mb-4"></div>
-          <p className="text-slate-400">Verifying access...</p>
+          <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin mx-auto mb-4" />
+          <p className="text-slate-500 text-sm">Verifying access…</p>
         </div>
       </div>
     );
   }
 
   if (!authenticated) {
-    return null; // Will redirect to login
+    return null;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen" style={{ background: "var(--bg-deep)" }}>
+      <div className="fixed inset-0 mesh-grid opacity-20 pointer-events-none" />
       {/* Header */}
-      <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700/50 shadow-xl">
+      <header className="relative z-20 glass border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4 sm:py-6">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl lg:rounded-2xl shadow-lg">
-                <Wifi className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
+                <Wifi className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
-                  Admin Dashboard
-                </h1>
-                <p className="text-slate-400 text-xs sm:text-sm hidden sm:block">
-                  ReadyWifi Management System
-                </p>
+                <h1 className="text-base font-bold text-white leading-tight">Admin Dashboard</h1>
+                <p className="text-[10px] text-slate-600 leading-none">ReadyWifi · Golden Hostel</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <Link
-                href="/"
-                className="flex items-center px-3 sm:px-4 py-2 sm:py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all duration-300 border border-slate-600/50 hover:border-cyan-500/50"
-              >
-                <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                <span className="text-sm sm:text-base">Back to Site</span>
+            <div className="flex items-center gap-2">
+              <Link href="/"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-500 hover:text-slate-300 transition-colors border border-white/8 hover:border-white/15 rounded-lg">
+                <ArrowLeft className="h-3.5 w-3.5" /><span className="hidden sm:inline">Back to Site</span>
               </Link>
-              <button
-                onClick={handleLogout}
-                className="flex items-center px-3 sm:px-4 py-2 sm:py-3 text-slate-300 hover:text-white hover:bg-red-600/20 rounded-lg transition-all duration-300 border border-slate-600/50 hover:border-red-500/50"
-              >
-                <LogOut className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                <span className="text-sm sm:text-base">Logout</span>
+              <button onClick={handleLogout}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-500 hover:text-red-400 transition-colors border border-white/8 hover:border-red-500/30 rounded-lg">
+                <LogOut className="h-3.5 w-3.5" /><span className="hidden sm:inline">Logout</span>
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 lg:mb-8">
-          {/* Total Vouchers Card */}
-          <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-3 sm:p-4 lg:p-6 hover:border-cyan-500/50 transition-all duration-300 group">
-            <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg lg:rounded-xl group-hover:from-cyan-500/30 group-hover:to-blue-500/30 transition-all duration-300">
-                <Package className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-cyan-400" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {[
+            { icon: <Package className="h-5 w-5 text-blue-400" />, color: "from-blue-500 to-indigo-600", glow: "rgba(99,102,241,0.15)", label: "Voucher Inventory", sub: "Total codes", val: stats?.totalVouchers || 0, hoverBorder: "rgba(99,102,241,0.3)" },
+            { icon: <CheckCircle className="h-5 w-5 text-green-400" />, color: "from-green-500 to-emerald-600", glow: "rgba(34,197,94,0.12)", label: "Ready to Sell", sub: "Unused codes", val: stats?.unusedVouchers || 0, hoverBorder: "rgba(34,197,94,0.3)" },
+            { icon: <ShoppingCart className="h-5 w-5 text-amber-400" />, color: "from-amber-500 to-orange-600", glow: "rgba(251,191,36,0.12)", label: "Transactions", sub: "All sales", val: stats?.totalSales || 0, hoverBorder: "rgba(251,191,36,0.3)" },
+            { icon: <DollarSign className="h-5 w-5 text-violet-400" />, color: "from-violet-500 to-purple-600", glow: "rgba(139,92,246,0.12)", label: "Total Revenue", sub: "Completed sales", val: `GHS ${(stats?.paidRevenue || 0).toFixed(2)}`, hoverBorder: "rgba(139,92,246,0.3)" },
+          ].map((c, i) => (
+            <div key={i} className="glass-strong rounded-2xl border border-white/6 p-5 hover:border-white/12 transition-all duration-300 group">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${c.glow}, rgba(255,255,255,0.03))`, border: "1px solid rgba(255,255,255,0.07)" }}>
+                  {c.icon}
+                </div>
+                <p className="text-2xl font-bold text-white">{c.val}</p>
               </div>
-              <div className="text-right">
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  {stats?.totalVouchers || 0}
-                </p>
-                <p className="text-xs text-slate-400">Total</p>
-              </div>
+              <p className="text-sm font-semibold text-slate-300">{c.label}</p>
+              <p className="text-xs text-slate-600">{c.sub}</p>
             </div>
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-1">
-              Voucher Inventory
-            </h3>
-            <p className="text-xs text-slate-500 hidden sm:block">
-              All voucher codes in system
-            </p>
-          </div>
-
-          {/* Available Vouchers Card */}
-          <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-3 sm:p-4 lg:p-6 hover:border-green-500/50 transition-all duration-300 group">
-            <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-lg lg:rounded-xl group-hover:from-green-500/30 group-hover:to-emerald-500/30 transition-all duration-300">
-                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-green-400" />
-              </div>
-              <div className="text-right">
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  {stats?.unusedVouchers || 0}
-                </p>
-                <p className="text-xs text-slate-400">Available</p>
-              </div>
-            </div>
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-1">
-              Ready to Sell
-            </h3>
-            <p className="text-xs text-slate-500 hidden sm:block">
-              Unused voucher codes
-            </p>
-          </div>
-
-          {/* Total Sales Card */}
-          <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-3 sm:p-4 lg:p-6 hover:border-amber-500/50 transition-all duration-300 group">
-            <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-lg lg:rounded-xl group-hover:from-amber-500/30 group-hover:to-orange-500/30 transition-all duration-300">
-                <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-amber-400" />
-              </div>
-              <div className="text-right">
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  {stats?.totalSales || 0}
-                </p>
-                <p className="text-xs text-slate-400">Sales</p>
-              </div>
-            </div>
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-1">
-              Total Transactions
-            </h3>
-            <p className="text-xs text-slate-500 hidden sm:block">
-              All sales processed
-            </p>
-          </div>
-
-          {/* Revenue Card */}
-          <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-3 sm:p-4 lg:p-6 hover:border-purple-500/50 transition-all duration-300 group">
-            <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg lg:rounded-xl group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-purple-400" />
-              </div>
-              <div className="text-right">
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  GHS {(stats?.paidRevenue || 0).toFixed(2)}
-                </p>
-                <p className="text-xs text-slate-400">Revenue</p>
-              </div>
-            </div>
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-1">
-              Total Revenue
-            </h3>
-            <p className="text-xs text-slate-500 hidden sm:block">
-              From completed sales
-            </p>
-          </div>
+          ))}
         </div>
 
         {/* PPSK Stats Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-6 lg:mb-8">
-          <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-3 sm:p-4 lg:p-6 hover:border-purple-500/50 transition-all duration-300 group">
-            <div className="flex items-center justify-between mb-2 sm:mb-3">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg lg:rounded-xl">
-                <Tv2 className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          {[
+            { icon: <Tv2 className="h-5 w-5 text-fuchsia-400" />, glow: "rgba(217,70,239,0.1)", label: "PPSK Inventory", sub: "TV/Console passwords", val: stats?.totalPpsk || 0 },
+            { icon: <Unlock className="h-5 w-5 text-green-400" />, glow: "rgba(34,197,94,0.1)", label: "PPSK Available", sub: "Ready to assign", val: stats?.unusedPpsk || 0 },
+            { icon: <Lock className="h-5 w-5 text-violet-400" />, glow: "rgba(139,92,246,0.1)", label: "PPSK Assigned", sub: "Already distributed", val: stats?.assignedPpsk || 0 },
+          ].map((c, i) => (
+            <div key={i} className="glass-strong rounded-2xl border border-white/6 p-5 hover:border-white/12 transition-all duration-300">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${c.glow}, rgba(255,255,255,0.03))`, border: "1px solid rgba(255,255,255,0.07)" }}>{c.icon}</div>
+                <p className="text-2xl font-bold text-white">{c.val}</p>
               </div>
-              <div className="text-right">
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  {stats?.totalPpsk || 0}
-                </p>
-                <p className="text-xs text-slate-400">Total</p>
-              </div>
+              <p className="text-sm font-semibold text-slate-300">{c.label}</p>
+              <p className="text-xs text-slate-600">{c.sub}</p>
             </div>
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-1">PPSK Inventory</h3>
-            <p className="text-xs text-slate-500 hidden sm:block">All TV/Console passwords</p>
-          </div>
-
-          <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-3 sm:p-4 lg:p-6 hover:border-green-500/50 transition-all duration-300 group">
-            <div className="flex items-center justify-between mb-2 sm:mb-3">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-lg lg:rounded-xl">
-                <Unlock className="h-4 w-4 sm:h-5 sm:w-5 text-green-400" />
-              </div>
-              <div className="text-right">
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  {stats?.unusedPpsk || 0}
-                </p>
-                <p className="text-xs text-slate-400">Available</p>
-              </div>
-            </div>
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-1">PPSK Available</h3>
-            <p className="text-xs text-slate-500 hidden sm:block">Ready to assign</p>
-          </div>
-
-          <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-3 sm:p-4 lg:p-6 hover:border-purple-500/50 transition-all duration-300 group">
-            <div className="flex items-center justify-between mb-2 sm:mb-3">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg lg:rounded-xl">
-                <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400" />
-              </div>
-              <div className="text-right">
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  {stats?.assignedPpsk || 0}
-                </p>
-                <p className="text-xs text-slate-400">Assigned</p>
-              </div>
-            </div>
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-1">PPSK Assigned</h3>
-            <p className="text-xs text-slate-500 hidden sm:block">Already distributed</p>
-          </div>
+          ))}
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-6 lg:mb-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center">
-            <Activity className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3 text-cyan-400" />
-            Quick Actions
+        <div className="mb-6">
+          <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+            <Activity className="h-4 w-4 text-indigo-400" />Quick Actions
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <Link
-              href="/admin/vouchers/upload"
-              className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-4 sm:p-6 hover:border-cyan-500/50 transition-all duration-300 cursor-pointer group hover:shadow-xl hover:shadow-cyan-500/10"
-            >
-              <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl lg:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:from-cyan-500/30 group-hover:to-blue-500/30 transition-all duration-300">
-                  <Upload className="h-8 w-8 sm:h-10 sm:w-10 text-cyan-400" />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {[
+              { href: "/admin/vouchers/upload", icon: <Upload className="h-6 w-6" />, label: "Upload Vouchers", sub: "Import CSV", grad: "from-blue-500 to-indigo-600", glow: "rgba(99,102,241,0.15)" },
+              { href: "/admin/ppsk", icon: <Tv2 className="h-6 w-6" />, label: "Upload PPSK", sub: "TV passwords", grad: "from-fuchsia-500 to-pink-600", glow: "rgba(217,70,239,0.12)" },
+              { href: "/admin/vouchers", icon: <Package className="h-6 w-6" />, label: "Manage Vouchers", sub: "Inventory", grad: "from-green-500 to-emerald-600", glow: "rgba(34,197,94,0.12)" },
+              { href: "/admin/ppsk/list", icon: <Lock className="h-6 w-6" />, label: "Manage PPSK", sub: "TV inventory", grad: "from-violet-500 to-purple-600", glow: "rgba(139,92,246,0.12)" },
+              { href: "/admin/sales", icon: <ShoppingCart className="h-6 w-6" />, label: "View Sales", sub: "Transactions", grad: "from-amber-500 to-orange-600", glow: "rgba(251,191,36,0.12)" },
+            ].map(a => (
+              <Link key={a.href} href={a.href}
+                className="glass-strong rounded-2xl border border-white/6 p-4 text-center hover:border-white/12 transition-all duration-300 group hover:-translate-y-0.5">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${a.grad} flex items-center justify-center text-white mx-auto mb-3 shadow-lg`}>
+                  {a.icon}
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2 group-hover:text-cyan-300 transition-colors">
-                  Upload Vouchers
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                  Import voucher codes from CSV files
-                </p>
-              </div>
-            </Link>
-
-            {/* PPSK Upload Card */}
-            <Link
-              href="/admin/ppsk"
-              className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-4 sm:p-6 hover:border-purple-500/50 transition-all duration-300 cursor-pointer group hover:shadow-xl hover:shadow-purple-500/10"
-            >
-              <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl lg:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                  <Tv2 className="h-8 w-8 sm:h-10 sm:w-10 text-purple-400" />
-                </div>
-                <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2 group-hover:text-purple-300 transition-colors">
-                  Upload PPSK
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                  TV &amp; Console passwords (PPSK)
-                </p>
-              </div>
-            </Link>
-
-            <Link
-              href="/admin/vouchers"
-              className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-4 sm:p-6 hover:border-green-500/50 transition-all duration-300 cursor-pointer group hover:shadow-xl hover:shadow-green-500/10"
-            >
-              <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-xl lg:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:from-green-500/30 group-hover:to-emerald-500/30 transition-all duration-300">
-                  <Package className="h-8 w-8 sm:h-10 sm:w-10 text-green-400" />
-                </div>
-                <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2 group-hover:text-green-300 transition-colors">
-                  Manage Vouchers
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                  View and manage voucher inventory
-                </p>
-              </div>
-            </Link>
-
-            {/* PPSK List Card */}
-            <Link
-              href="/admin/ppsk/list"
-              className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-4 sm:p-6 hover:border-purple-500/50 transition-all duration-300 cursor-pointer group hover:shadow-xl hover:shadow-purple-500/10"
-            >
-              <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl lg:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                  <Lock className="h-8 w-8 sm:h-10 sm:w-10 text-purple-400" />
-                </div>
-                <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2 group-hover:text-purple-300 transition-colors">
-                  Manage PPSK
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                  View TV/Console password inventory
-                </p>
-              </div>
-            </Link>
-
-            <Link
-              href="/admin/sales"
-              className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-4 sm:p-6 hover:border-amber-500/50 transition-all duration-300 cursor-pointer group hover:shadow-xl hover:shadow-amber-500/10"
-            >
-              <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl lg:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:from-amber-500/30 group-hover:to-orange-500/30 transition-all duration-300">
-                  <ShoppingCart className="h-8 w-8 sm:h-10 sm:w-10 text-amber-400" />
-                </div>
-                <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2 group-hover:text-amber-300 transition-colors">
-                  View Sales
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                  Monitor sales and transaction history
-                </p>
-              </div>
-            </Link>
+                <p className="text-xs font-semibold text-white mb-0.5 group-hover:text-indigo-300 transition-colors">{a.label}</p>
+                <p className="text-[10px] text-slate-600">{a.sub}</p>
+              </Link>
+            ))}
           </div>
         </div>
 
         {/* Admin Tools */}
-        <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-slate-700/50 p-4 sm:p-6 lg:p-8 mb-6 lg:mb-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center">
-            <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3 text-cyan-400" />
-            Admin Tools
+        <div className="glass-strong rounded-2xl border border-white/6 p-6 mb-6">
+          <h2 className="text-base font-bold text-white mb-1 flex items-center gap-2">
+            <MessageSquare className="h-4 w-4 text-indigo-400" />Admin Tools
           </h2>
-          <p className="text-slate-400 mb-4 sm:mb-6 text-sm sm:text-base">
-            Customer support and system management tools
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <button
-              onClick={() => setShowManualVerify(true)}
-              className="flex items-center justify-center px-4 sm:px-6 py-6 sm:py-8 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-xl hover:from-cyan-500/30 hover:to-blue-500/30 hover:border-cyan-500/50 transition-all duration-300 group"
-            >
-              <div className="text-center">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-cyan-500/20 rounded-xl lg:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:bg-cyan-500/30 transition-colors">
-                  <Search className="h-6 w-6 sm:h-8 sm:w-8 text-cyan-400" />
-                </div>
-                <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2 group-hover:text-cyan-300 transition-colors">
-                  Manual Verification
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                  Verify payment and resend voucher code
-                </p>
-              </div>
-            </button>
-
-            <button
-              onClick={fixSalesData}
-              className="flex items-center justify-center px-6 py-8 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/30 rounded-xl hover:from-orange-500/30 hover:to-amber-500/30 hover:border-orange-500/50 transition-all duration-300 group"
-            >
-              <div className="text-center">
-                <div className="w-16 h-16 bg-orange-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-500/30 transition-colors">
-                  <RefreshCw className="h-8 w-8 text-orange-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-orange-300 transition-colors">
-                  Fix Sales Data
-                </h3>
-                <p className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                  Sync voucher and sales status
-                </p>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setShowClearDatabase(true)}
-              className="flex items-center justify-center px-6 py-8 bg-gradient-to-r from-red-500/20 to-pink-500/20 border border-red-500/30 rounded-xl hover:from-red-500/30 hover:to-pink-500/30 hover:border-red-500/50 transition-all duration-300 group"
-            >
-              <div className="text-center">
-                <div className="w-16 h-16 bg-red-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-red-500/30 transition-colors">
-                  <Trash2 className="h-8 w-8 text-red-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-red-300 transition-colors">
-                  Clear Database
-                </h3>
-                <p className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                  Reset all data (irreversible)
-                </p>
-              </div>
-            </button>
+          <p className="text-xs text-slate-600 mb-5">Support and system management</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { onClick: () => setShowManualVerify(true), icon: <Search className="h-6 w-6" />, label: "Manual Verification", sub: "Verify payment & resend code", bg: "rgba(99,102,241,0.1)", border: "rgba(99,102,241,0.25)", ic: "text-indigo-400" },
+              { onClick: fixSalesData, icon: <RefreshCw className="h-6 w-6" />, label: "Fix Sales Data", sub: "Sync voucher and sales status", bg: "rgba(251,146,60,0.1)", border: "rgba(251,146,60,0.25)", ic: "text-orange-400" },
+              { onClick: () => setShowClearDatabase(true), icon: <Trash2 className="h-6 w-6" />, label: "Clear Database", sub: "Reset all data (irreversible)", bg: "rgba(239,68,68,0.08)", border: "rgba(239,68,68,0.25)", ic: "text-red-400" },
+            ].map((t, i) => (
+              <button key={i} onClick={t.onClick}
+                className="rounded-xl p-5 text-center hover:brightness-110 transition-all duration-200 group border"
+                style={{ background: t.bg, borderColor: t.border }}>
+                <div className={`text-center mx-auto mb-3 ${t.ic}`}>{t.icon}</div>
+                <p className={`text-sm font-semibold mb-1 ${t.ic}`}>{t.label}</p>
+                <p className="text-xs text-slate-500">{t.sub}</p>
+              </button>
+            ))}
           </div>
         </div>
 
         {/* System Status */}
-        <div className="bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8">
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-            <TrendingUp className="h-6 w-6 mr-3 text-cyan-400" />
-            System Status
+        <div className="glass-strong rounded-2xl border border-white/6 p-6 mb-6">
+          <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 text-indigo-400" />System Status
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-slate-700/30 rounded-xl p-6 border border-slate-600/30">
-              <div className="flex items-center mb-4">
-                <div className="w-3 h-3 bg-green-400 rounded-full mr-3 animate-pulse"></div>
-                <h3 className="text-lg font-semibold text-white">
-                  System Health
-                </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { dot: "bg-green-400", animate: true, title: "System Health", val: "All systems operational", sub: "Last checked: Just now" },
+              { dot: "bg-indigo-400", animate: false, title: "Sales Activity", val: `${stats?.soldVouchers || 0} vouchers sold`, sub: `Revenue: GHS ${(stats?.paidRevenue || 0).toFixed(2)}` },
+              { dot: "bg-amber-400", animate: false, title: "Inventory", val: `${stats?.unusedVouchers || 0} available`, sub: `Total: ${stats?.totalVouchers || 0} vouchers` },
+            ].map((s, i) => (
+              <div key={i} className="rounded-xl p-4 border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className={`w-2 h-2 rounded-full ${s.dot} ${s.animate ? "animate-pulse" : ""}`} />
+                  <h3 className="text-sm font-semibold text-white">{s.title}</h3>
+                </div>
+                <p className="text-sm text-slate-400 mb-1">{s.val}</p>
+                <p className="text-xs text-slate-600">{s.sub}</p>
               </div>
-              <p className="text-slate-400 text-sm mb-2">
-                All systems operational
-              </p>
-              <p className="text-xs text-slate-500">Last checked: Just now</p>
-            </div>
-
-            <div className="bg-slate-700/30 rounded-xl p-6 border border-slate-600/30">
-              <div className="flex items-center mb-4">
-                <div className="w-3 h-3 bg-cyan-400 rounded-full mr-3"></div>
-                <h3 className="text-lg font-semibold text-white">
-                  Sales Activity
-                </h3>
-              </div>
-              <p className="text-slate-400 text-sm mb-2">
-                {stats?.soldVouchers || 0} vouchers sold today
-              </p>
-              <p className="text-xs text-slate-500">
-                Revenue: GHS {(stats?.paidRevenue || 0).toFixed(2)}
-              </p>
-            </div>
-
-            <div className="bg-slate-700/30 rounded-xl p-6 border border-slate-600/30">
-              <div className="flex items-center mb-4">
-                <div className="w-3 h-3 bg-amber-400 rounded-full mr-3"></div>
-                <h3 className="text-lg font-semibold text-white">Inventory</h3>
-              </div>
-              <p className="text-slate-400 text-sm mb-2">
-                {stats?.unusedVouchers || 0} vouchers available
-              </p>
-              <p className="text-xs text-slate-500">
-                Total: {stats?.totalVouchers || 0} vouchers
-              </p>
-            </div>
-      </div>
+            ))}
+          </div>
         </div>
 
         {/* Analytics Section */}
-        <div className="bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8 mt-6">
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-            <BarChart3 className="h-6 w-6 mr-3 text-cyan-400" />
-            Analytics Overview
+        <div className="glass-strong rounded-2xl border border-white/6 p-6">
+          <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-indigo-400" />Analytics Overview
           </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Sales Chart */}
-            <div className="bg-slate-700/30 rounded-xl p-6 border border-slate-600/30">
-              <h3 className="text-lg font-semibold text-white mb-4">Weekly Sales</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div className="rounded-xl p-5 border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
+              <h3 className="text-sm font-semibold text-white mb-4">Weekly Sales</h3>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData.weeklySales} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
@@ -662,9 +415,8 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Revenue Distribution */}
-            <div className="bg-slate-700/30 rounded-xl p-6 border border-slate-600/30">
-              <h3 className="text-lg font-semibold text-white mb-4">Revenue by Plan</h3>
+            <div className="rounded-xl p-5 border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
+              <h3 className="text-sm font-semibold text-white mb-4">Revenue by Plan</h3>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData.revenueByPlan} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
@@ -687,51 +439,33 @@ export default function AdminDashboard() {
 
       {/* Manual Verification Modal */}
       {showManualVerify && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700/50 p-8 max-w-md w-full">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-white flex items-center">
-                <Search className="h-5 w-5 mr-2 text-cyan-400" />
-                Manual Verification
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="glass-strong rounded-2xl border border-white/10 p-7 max-w-md w-full shadow-2xl">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Search className="h-4 w-4 text-indigo-400" />Manual Verification
               </h3>
-              <button
-                onClick={() => setShowManualVerify(false)}
-                className="text-slate-400 hover:text-white transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <button onClick={() => setShowManualVerify(false)} className="text-slate-500 hover:text-white transition-colors"><X className="h-4 w-4" /></button>
             </div>
-            <p className="text-slate-400 mb-6">
-              Enter the payment reference to verify and resend the voucher code
-              to the customer.
-            </p>
+            <p className="text-sm text-slate-400 mb-5">Enter the payment reference to verify and resend the voucher code to the customer.</p>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Payment Reference
-                </label>
-                <input
-                  type="text"
-                  value={paymentRef}
-                  onChange={(e) => setPaymentRef(e.target.value)}
+                <label className="block text-xs font-medium text-slate-400 mb-2">Payment Reference</label>
+                <input type="text" value={paymentRef} onChange={e => setPaymentRef(e.target.value)}
                   placeholder="e.g., WEB_1234567890_abc123"
-                  className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20"
-                />
+                  className="w-full px-4 py-3 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none transition-all"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
+                  onFocus={e => { e.currentTarget.style.borderColor = "rgba(99,102,241,0.5)"; }}
+                  onBlur={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }} />
               </div>
-              <div className="flex space-x-3">
-                <button
-                  onClick={manualVerifyPayment}
-                  disabled={verifying}
-                  className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {verifying ? "Verifying..." : "Verify Payment"}
+              <div className="flex gap-3">
+                <button onClick={manualVerifyPayment} disabled={verifying}
+                  className="flex-1 py-3 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
+                  style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
+                  {verifying ? "Verifying…" : "Verify Payment"}
                 </button>
-                <button
-                  onClick={() => setShowManualVerify(false)}
-                  className="px-6 py-3 bg-slate-600 text-white rounded-xl font-semibold hover:bg-slate-700 transition-colors"
-                >
-                  Cancel
-                </button>
+                <button onClick={() => setShowManualVerify(false)}
+                  className="px-5 py-3 rounded-xl text-sm glass border border-white/8 text-slate-400 hover:text-white transition-colors">Cancel</button>
               </div>
             </div>
           </div>
@@ -740,48 +474,27 @@ export default function AdminDashboard() {
 
       {/* Clear Database Modal */}
       {showClearDatabase && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700/50 p-8 max-w-md w-full">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-white flex items-center">
-                <Trash2 className="h-5 w-5 mr-2 text-red-400" />
-                Clear Database
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="glass-strong rounded-2xl border border-red-500/20 p-7 max-w-md w-full shadow-2xl">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Trash2 className="h-4 w-4 text-red-400" />Clear Database
               </h3>
-              <button
-                onClick={() => setShowClearDatabase(false)}
-                className="text-slate-400 hover:text-white transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <button onClick={() => setShowClearDatabase(false)} className="text-slate-500 hover:text-white transition-colors"><X className="h-4 w-4" /></button>
             </div>
-            <div className="mb-6">
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-4">
-                <div className="flex items-center mb-2">
-                  <AlertTriangle className="h-5 w-5 text-red-400 mr-2" />
-                  <span className="text-red-400 font-semibold">Warning</span>
-                </div>
-                <p className="text-red-300 text-sm">
-                  This action will permanently delete all data including
-                  vouchers, sales, and logs. This cannot be undone.
-                </p>
+            <div className="rounded-xl p-4 mb-5 border border-red-500/20" style={{ background: "rgba(239,68,68,0.08)" }}>
+              <div className="flex gap-2 mb-2">
+                <AlertTriangle className="h-4 w-4 text-red-400 flex-shrink-0" />
+                <span className="text-sm font-semibold text-red-400">Irreversible Action</span>
               </div>
-              <p className="text-slate-400 text-sm">
-                Are you sure you want to proceed? Type "DELETE" to confirm.
-              </p>
+              <p className="text-xs text-red-200/70">This will permanently delete all vouchers, PPSK passwords, sales, and logs. This cannot be undone.</p>
             </div>
-            <div className="flex space-x-3">
-              <button
-                onClick={clearDatabase}
-                className="flex-1 bg-gradient-to-r from-red-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-red-700 hover:to-pink-700 transition-all duration-300"
-              >
-                Clear Database
-              </button>
-              <button
-                onClick={() => setShowClearDatabase(false)}
-                className="px-6 py-3 bg-slate-600 text-white rounded-xl font-semibold hover:bg-slate-700 transition-colors"
-              >
-                Cancel
-              </button>
+            <div className="flex gap-3">
+              <button onClick={clearDatabase}
+                className="flex-1 py-3 rounded-xl text-sm font-semibold text-white transition-all"
+                style={{ background: "linear-gradient(135deg, #dc2626, #db2777)" }}>Clear Database</button>
+              <button onClick={() => setShowClearDatabase(false)}
+                className="px-5 py-3 rounded-xl text-sm glass border border-white/8 text-slate-400 hover:text-white transition-colors">Cancel</button>
             </div>
           </div>
         </div>

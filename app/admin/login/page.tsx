@@ -4,51 +4,28 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  ArrowLeft,
-  Lock,
-  Eye,
-  EyeOff,
-  Shield,
-  AlertCircle,
-} from "lucide-react";
+import { ArrowLeft, Lock, Eye, EyeOff, Shield, AlertCircle, Wifi } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function AdminLoginPage() {
-  const [password, setPassword] = useState("");
+  const [password, setPassword]       = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading]         = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!password.trim()) {
-      toast.error("Please enter the admin password");
-      return;
-    }
-
+    if (!password.trim()) { toast.error("Please enter the admin password"); return; }
     setLoading(true);
-
     try {
-      const response = await fetch("/api/admin/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const res  = await fetch("/api/admin/auth/login", {
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-
-      const data = await response.json();
-
-      if (data.success) {
-        toast.success("Login successful!");
-        router.push("/admin");
-      } else {
-        toast.error(data.error || "Invalid password");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
+      const data = await res.json();
+      if (data.success) { toast.success("Login successful!"); router.push("/admin"); }
+      else               { toast.error(data.error || "Invalid password"); }
+    } catch {
       toast.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
@@ -56,58 +33,66 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        {/* Header */}
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "var(--bg-deep)" }}>
+      <div className="fixed inset-0 mesh-grid opacity-20 pointer-events-none" />
+      {/* Glow */}
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-64 rounded-full opacity-15 pointer-events-none"
+           style={{ background: "radial-gradient(ellipse, #6366f1, transparent)", filter: "blur(80px)" }} />
+
+      <div className="relative z-10 w-full max-w-md">
+        {/* Back link */}
         <div className="text-center mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center text-slate-400 hover:text-white transition-colors mb-6"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            <span className="text-sm">Back to Site</span>
+          <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors mb-8 group">
+            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+            Back to Site
           </Link>
 
-          <div className="w-20 h-20 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-            <Shield className="h-10 w-10 text-white" />
+          {/* Logo */}
+          <div className="flex flex-col items-center mt-4">
+            <div className="relative mb-5">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-2xl shadow-violet-500/30">
+                <Shield className="h-8 w-8 text-white" />
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-indigo-500 rounded-full border-2 border-[var(--bg-deep)] flex items-center justify-center">
+                <Lock className="h-2.5 w-2.5 text-white" />
+              </div>
+            </div>
+            <div className="flex items-center gap-2 mb-2">
+              <Wifi className="h-4 w-4 text-indigo-400" />
+              <span className="text-sm text-slate-500">ReadyWifi</span>
+            </div>
+            <h1 className="text-2xl font-bold text-white mb-1">Admin Access</h1>
+            <p className="text-slate-500 text-sm">Enter the admin password to continue</p>
           </div>
-
-          <h1 className="text-2xl font-bold text-white mb-2">Admin Access</h1>
-          <p className="text-slate-400 text-sm">
-            Enter the admin password to access the dashboard
-          </p>
         </div>
 
-        {/* Login Form */}
-        <div className="bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8 shadow-2xl">
-          <form onSubmit={handleLogin} className="space-y-6">
+        {/* Card */}
+        <div className="glass-strong rounded-2xl border border-white/8 p-7">
+          <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="admin-password">
                 Admin Password
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-400" />
-                </div>
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
                 <input
+                  id="admin-password"
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-12 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20"
+                  onChange={e => setPassword(e.target.value)}
                   placeholder="Enter admin password"
                   disabled={loading}
+                  className="w-full pl-11 pr-12 py-3.5 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none transition-all duration-300 disabled:opacity-50"
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                  onFocus={e => { e.currentTarget.style.borderColor = "rgba(99,102,241,0.5)"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.1)"; }}
+                  onBlur={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.boxShadow = "none"; }}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white transition-colors"
-                  disabled={loading}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
+                <button type="button" onClick={() => setShowPassword(!showPassword)} disabled={loading}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
@@ -115,40 +100,33 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading || !password.trim()}
-              className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3.5 rounded-xl text-sm font-semibold text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              style={{
+                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                boxShadow: loading || !password.trim() ? "none" : "0 0 25px rgba(99,102,241,0.35)",
+              }}
             >
               {loading ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/30 border-t-white mr-2"></div>
-                  Authenticating...
-                </div>
+                <><div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Authenticating…</>
               ) : (
-                "Access Dashboard"
+                <><Shield className="h-4 w-4" /> Access Dashboard</>
               )}
             </button>
           </form>
 
-          {/* Security Notice */}
-          <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-            <div className="flex items-start">
-              <AlertCircle className="h-5 w-5 text-amber-400 mr-3 mt-0.5 flex-shrink-0" />
+          {/* Security notice */}
+          <div className="mt-5 p-4 rounded-xl border border-amber-500/20" style={{ background: "rgba(234,179,8,0.06)" }}>
+            <div className="flex gap-3">
+              <AlertCircle className="h-4 w-4 text-amber-400 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-sm font-semibold text-amber-300 mb-1">
-                  Security Notice
-                </h4>
-                <p className="text-xs text-amber-200/80">
-                  This is a protected admin area. Only authorized personnel
-                  should access this dashboard.
-                </p>
+                <p className="text-xs font-semibold text-amber-300 mb-1">Security Notice</p>
+                <p className="text-xs text-amber-200/60">This is a protected admin area. Only authorised personnel should access this dashboard.</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="text-center mt-6">
-          <p className="text-xs text-slate-500">ReadyWifi Admin Dashboard</p>
-        </div>
+        <p className="text-center text-xs text-slate-600 mt-6">ReadyWifi Admin Dashboard · Golden Hostel</p>
       </div>
     </div>
   );

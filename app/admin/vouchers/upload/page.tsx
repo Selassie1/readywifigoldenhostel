@@ -3,317 +3,182 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
-import {
-  Upload,
-  ArrowLeft,
-  FileText,
-  CheckCircle,
-  Wifi,
-  AlertCircle,
-  Info,
-} from "lucide-react";
+import { Upload, ArrowLeft, FileText, CheckCircle, AlertCircle, Info, Package } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function VoucherUploadPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState("unlimited");
-  const [uploading, setUploading] = useState(false);
-  const [uploadResult, setUploadResult] = useState<any>(null);
+  const [selectedFile, setSelectedFile]   = useState<File | null>(null);
+  const [selectedPlan, setSelectedPlan]   = useState("unlimited");
+  const [uploading, setUploading]         = useState(false);
+  const [uploadResult, setUploadResult]   = useState<any>(null);
 
-  // To add a new plan later, add an entry to this array.
+  // To add a new plan later, add an entry here.
   const plans = [
-    { id: "basic",     name: "Basic",     data: "30GB",      duration: "30 Days" },
-    { id: "pro",       name: "Pro",       data: "95GB",      duration: "30 Days" },
-    { id: "unlimited", name: "Unlimited", data: "Unlimited", duration: "30 Days" },
+    { id: "basic",     name: "Basic",     data: "30GB",      duration: "30 Days", grad: "from-sky-500 to-blue-600" },
+    { id: "pro",       name: "Pro",       data: "95GB",      duration: "30 Days", grad: "from-violet-500 to-purple-600" },
+    { id: "unlimited", name: "Unlimited", data: "Unlimited", duration: "30 Days", grad: "from-blue-500 to-indigo-600" },
   ];
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (file.type !== "text/csv") {
-        toast.error("Please select a CSV file");
-        return;
-      }
-      setSelectedFile(file);
-      setUploadResult(null);
-    }
+    if (!file) return;
+    if (file.type !== "text/csv") { toast.error("Please select a CSV file"); return; }
+    setSelectedFile(file); setUploadResult(null);
   };
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!selectedFile) {
-      toast.error("Please select a file");
-      return;
-    }
-
+    if (!selectedFile) { toast.error("Please select a file"); return; }
     setUploading(true);
-
     try {
       const formData = new FormData();
       formData.append("file", selectedFile);
       formData.append("plan", selectedPlan);
-
-      const response = await fetch("/api/admin/vouchers/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-
+      const res    = await fetch("/api/admin/vouchers/upload", { method: "POST", body: formData });
+      const result = await res.json();
       if (result.success) {
-        setUploadResult(result);
-        toast.success("Vouchers uploaded successfully");
-        setSelectedFile(null);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
-      } else {
-        toast.error(result.error || "Upload failed");
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      toast.error("Upload failed");
-    } finally {
-      setUploading(false);
-    }
+        setUploadResult(result); toast.success("Vouchers uploaded successfully!");
+        setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = "";
+      } else { toast.error(result.error || "Upload failed"); }
+    } catch { toast.error("Upload failed"); } finally { setUploading(false); }
   };
 
+  const inputStyle = { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen" style={{ background: "var(--bg-deep)" }}>
+      <div className="fixed inset-0 mesh-grid opacity-20 pointer-events-none" />
+
       {/* Header */}
-      <header className="bg-slate-800/80 backdrop-blur-sm border-b border-slate-700/50 shadow-lg">
+      <header className="relative z-20 glass border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center space-x-3">
-              <Link
-                href="/admin"
-                className="flex items-center text-slate-400 hover:text-white transition-colors"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                <span className="text-sm">Back</span>
-              </Link>
-              <div className="h-6 w-px bg-slate-600"></div>
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg">
-                  <Upload className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold text-white">
-                    Upload Vouchers
-                  </h1>
-                </div>
-              </div>
+          <div className="flex items-center h-14 gap-3">
+            <Link href="/admin" className="flex items-center gap-1.5 text-slate-500 hover:text-slate-300 transition-colors text-xs group">
+              <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />Back
+            </Link>
+            <div className="h-4 w-px bg-white/10" />
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white shadow-lg">
+              <Upload className="h-4 w-4" />
+            </div>
+            <div>
+              <h1 className="text-sm font-bold text-white">Upload Vouchers</h1>
+              <p className="text-[10px] text-slate-600">Import voucher codes from CSV</p>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-          {/* Upload Form */}
-          <div className="bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 sm:p-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 flex items-center">
-              <Upload className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3 text-cyan-400" />
-              Upload CSV File
-            </h2>
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-            <form onSubmit={handleUpload} className="space-y-6">
+          {/* Upload Form */}
+          <div className="glass-strong rounded-2xl border border-white/6 p-6">
+            <h2 className="text-sm font-bold text-white mb-5 flex items-center gap-2">
+              <Upload className="h-4 w-4 text-indigo-400" />Upload CSV File
+            </h2>
+            <form onSubmit={handleUpload} className="space-y-5">
+              {/* Plan selector */}
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-3">
-                  Select Plan
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {plans.map((plan) => (
-                    <button
-                      key={plan.id}
-                      type="button"
-                      onClick={() => setSelectedPlan(plan.id)}
-                      className={`p-4 rounded-xl border-2 transition-all duration-300 text-left ${
-                        selectedPlan === plan.id
-                          ? "border-cyan-500/50 bg-cyan-500/10 shadow-lg shadow-cyan-500/10"
-                          : "border-slate-600/50 bg-slate-700/30 hover:border-slate-500/50 hover:bg-slate-700/50"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold text-white">
-                          {plan.name}
-                        </h3>
-                        {selectedPlan === plan.id && (
-                          <CheckCircle className="h-4 w-4 text-cyan-400" />
-                        )}
+                <label className="block text-[11px] text-slate-500 mb-3">Select Plan</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {plans.map(plan => (
+                    <button key={plan.id} type="button" onClick={() => setSelectedPlan(plan.id)}
+                      className={`p-3 rounded-xl border-2 text-left transition-all duration-200 ${selectedPlan === plan.id ? "border-indigo-500/50 bg-indigo-500/10" : "border-white/6 hover:border-white/12"}`}
+                      style={selectedPlan !== plan.id ? { background: "rgba(255,255,255,0.03)" } : {}}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-bold text-white">{plan.name}</span>
+                        {selectedPlan === plan.id && <CheckCircle className="h-3.5 w-3.5 text-indigo-400" />}
                       </div>
-                      <p className="text-sm text-slate-300 mb-1">{plan.data}</p>
-                      <p className="text-xs text-slate-400">{plan.duration}</p>
+                      <p className="text-[10px] text-slate-400">{plan.data}</p>
+                      <p className="text-[10px] text-slate-600">{plan.duration}</p>
                     </button>
                   ))}
                 </div>
               </div>
 
+              {/* Drop zone */}
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  CSV File
-                </label>
-                <div
-                  className="border-2 border-dashed border-slate-600/50 rounded-xl p-6 sm:p-8 text-center hover:border-cyan-500/50 transition-all duration-300 cursor-pointer bg-slate-700/30 hover:bg-slate-700/50"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".csv"
-                    onChange={handleFileSelect}
-                    className="hidden"
-                  />
-
+                <label className="block text-[11px] text-slate-500 mb-2">CSV File</label>
+                <div className="relative border-2 border-dashed border-white/10 rounded-xl p-8 text-center hover:border-indigo-500/40 transition-all duration-200 cursor-pointer"
+                  style={{ background: "rgba(255,255,255,0.02)" }}
+                  onClick={() => fileInputRef.current?.click()}>
+                  <input ref={fileInputRef} type="file" accept=".csv" onChange={handleFileSelect} className="hidden" />
                   {selectedFile ? (
-                    <div className="flex items-center justify-center">
-                      <FileText className="h-8 w-8 text-cyan-400 mr-3" />
-                      <div>
-                        <p className="text-sm font-medium text-white">
-                          {selectedFile.name}
-                        </p>
-                        <p className="text-xs text-slate-400">
-                          {(selectedFile.size / 1024).toFixed(1)} KB
-                        </p>
+                    <div className="flex items-center justify-center gap-3">
+                      <FileText className="h-7 w-7 text-indigo-400" />
+                      <div className="text-left">
+                        <p className="text-sm font-semibold text-white">{selectedFile.name}</p>
+                        <p className="text-xs text-slate-500">{(selectedFile.size / 1024).toFixed(1)} KB</p>
                       </div>
                     </div>
                   ) : (
-                    <div>
-                      <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                      <p className="text-sm text-slate-300">
-                        Click to select CSV file
-                      </p>
-                      <p className="text-xs text-slate-500 mt-1">
-                        Only CSV files are accepted
-                      </p>
-                    </div>
+                    <>
+                      <Upload className="h-10 w-10 text-slate-700 mx-auto mb-3" />
+                      <p className="text-sm text-slate-400">Click to select CSV file</p>
+                      <p className="text-xs text-slate-700 mt-1">Only .csv files are accepted</p>
+                    </>
                   )}
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={!selectedFile || uploading}
-                className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-              >
-                {uploading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Uploading...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload Vouchers
-                  </>
-                )}
+              <button type="submit" disabled={!selectedFile || uploading}
+                className="w-full py-3 rounded-xl text-sm font-semibold text-white flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                style={{ background: "linear-gradient(135deg,#6366f1,#8b5cf6)", boxShadow: selectedFile && !uploading ? "0 0 20px rgba(99,102,241,0.3)" : "none" }}>
+                {uploading
+                  ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Uploading…</>
+                  : <><Upload className="h-4 w-4" />Upload Vouchers</>}
               </button>
             </form>
           </div>
 
-          {/* Instructions */}
-          <div className="space-y-4 sm:space-y-6">
-            <div className="bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-4 sm:p-6">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                <Info className="h-5 w-5 mr-2 text-cyan-400" />
-                CSV Format Requirements
-              </h3>
-              <div className="space-y-3 text-sm text-slate-300">
-                <p>
-                  Your CSV file should contain a column named{" "}
-                  <code className="bg-slate-700 px-2 py-1 rounded text-cyan-400">
-                    code
-                  </code>{" "}
-                  with voucher codes.
-                </p>
-                <p>Example format:</p>
-                <div className="bg-slate-700/50 p-3 rounded-lg font-mono text-xs border border-slate-600/50">
-                  code
-                  <br />
-                  ABC12345
-                  <br />
-                  DEF67890
-                  <br />
-                  GHI11111
-                </div>
+          {/* Sidebar instructions */}
+          <div className="space-y-4">
+            {/* Format */}
+            <div className="glass-strong rounded-2xl border border-white/6 p-5">
+              <h3 className="text-xs font-bold text-white mb-3 flex items-center gap-2"><Info className="h-3.5 w-3.5 text-indigo-400" />CSV Format</h3>
+              <p className="text-xs text-slate-400 mb-3">Your CSV file should have a column named <code className="px-1.5 py-0.5 rounded text-indigo-300 text-[11px]" style={{ background: "rgba(99,102,241,0.12)" }}>code</code> with the voucher codes.</p>
+              <div className="rounded-xl p-3 font-mono text-[11px] text-slate-400 border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
+                code<br />ABC12345<br />DEF67890<br />GHI11111
               </div>
             </div>
-
-            <div className="bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-4 sm:p-6">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                <AlertCircle className="h-5 w-5 mr-2 text-amber-400" />
-                Upload Process
-              </h3>
-              <div className="space-y-3 text-sm text-slate-300">
-                <div className="flex items-center">
-                  <div className="w-6 h-6 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center text-xs font-bold mr-3">
-                    1
+            {/* Steps */}
+            <div className="glass-strong rounded-2xl border border-white/6 p-5">
+              <h3 className="text-xs font-bold text-white mb-3 flex items-center gap-2"><AlertCircle className="h-3.5 w-3.5 text-amber-400" />Upload Steps</h3>
+              <div className="space-y-2.5">
+                {["Select the plan for the vouchers", "Choose your CSV file", "Click upload to process", "Review the upload results"].map((s, i) => (
+                  <div key={i} className="flex items-center gap-2.5 text-xs text-slate-400">
+                    <div className="w-5 h-5 rounded-full bg-indigo-600/20 text-indigo-400 font-bold text-[10px] flex items-center justify-center flex-shrink-0">{i + 1}</div>
+                    {s}
                   </div>
-                  Select the plan for the vouchers
-                </div>
-                <div className="flex items-center">
-                  <div className="w-6 h-6 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center text-xs font-bold mr-3">
-                    2
-                  </div>
-                  Choose your CSV file
-                </div>
-                <div className="flex items-center">
-                  <div className="w-6 h-6 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center text-xs font-bold mr-3">
-                    3
-                  </div>
-                  Click upload to process
-                </div>
-                <div className="flex items-center">
-                  <div className="w-6 h-6 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center text-xs font-bold mr-3">
-                    4
-                  </div>
-                  Review the upload results
-                </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Upload Results */}
+        {/* Results */}
         {uploadResult && (
-          <div className="mt-6 sm:mt-8 bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 sm:p-8">
-            <div className="flex items-center mb-6">
-              <CheckCircle className="h-6 w-6 text-green-400 mr-3" />
-              <h3 className="text-xl font-bold text-white">Upload Results</h3>
+          <div className="mt-6 glass-strong rounded-2xl border border-green-500/20 p-6">
+            <div className="flex items-center gap-2 mb-5">
+              <CheckCircle className="h-5 w-5 text-green-400" />
+              <h3 className="text-sm font-bold text-white">Upload Complete</h3>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              <div className="bg-slate-700/30 p-4 sm:p-6 rounded-xl border border-slate-600/30">
-                <p className="text-sm text-slate-400 mb-2">Total Codes</p>
-                <p className="text-2xl sm:text-3xl font-bold text-white">
-                  {uploadResult.stats.total}
-                </p>
-              </div>
-
-              <div className="bg-amber-500/10 p-4 sm:p-6 rounded-xl border border-amber-500/20">
-                <p className="text-sm text-amber-400 mb-2">Duplicates</p>
-                <p className="text-2xl sm:text-3xl font-bold text-amber-400">
-                  {uploadResult.stats.duplicates}
-                </p>
-              </div>
-
-              <div className="bg-green-500/10 p-4 sm:p-6 rounded-xl border border-green-500/20">
-                <p className="text-sm text-green-400 mb-2">Imported</p>
-                <p className="text-2xl sm:text-3xl font-bold text-green-400">
-                  {uploadResult.stats.imported}
-                </p>
-              </div>
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              {[
+                { label: "Total Codes", val: uploadResult.stats.total, color: "text-white", bg: "rgba(255,255,255,0.04)", border: "rgba(255,255,255,0.08)" },
+                { label: "Duplicates",  val: uploadResult.stats.duplicates, color: "text-amber-400", bg: "rgba(251,191,36,0.08)", border: "rgba(251,191,36,0.2)" },
+                { label: "Imported",    val: uploadResult.stats.imported, color: "text-green-400", bg: "rgba(34,197,94,0.08)", border: "rgba(34,197,94,0.2)" },
+              ].map(s => (
+                <div key={s.label} className="rounded-xl p-4 border" style={{ background: s.bg, borderColor: s.border }}>
+                  <p className="text-[10px] text-slate-500 mb-1">{s.label}</p>
+                  <p className={`text-2xl font-bold ${s.color}`}>{s.val}</p>
+                </div>
+              ))}
             </div>
-
-            <div className="mt-6 p-4 bg-cyan-500/10 rounded-xl border border-cyan-500/20">
-              <p className="text-sm text-cyan-300">
-                <strong>Batch ID:</strong>{" "}
-                <span className="font-mono text-cyan-400">
-                  {uploadResult.batchId}
-                </span>
-              </p>
+            <div className="rounded-xl p-3 border border-indigo-500/20 text-xs" style={{ background: "rgba(99,102,241,0.08)" }}>
+              <span className="text-slate-500">Batch ID: </span>
+              <code className="font-mono text-indigo-300">{uploadResult.batchId}</code>
             </div>
           </div>
         )}

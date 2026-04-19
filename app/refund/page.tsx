@@ -1,295 +1,148 @@
 // app/refund/page.tsx
 "use client";
-
 import Link from "next/link";
-import {
-  ArrowLeft,
-  RefreshCw,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-} from "lucide-react";
+import { ArrowLeft, RefreshCw, CheckCircle, XCircle, Clock, AlertTriangle, Wifi } from "lucide-react";
 
 export default function RefundPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Header */}
-      <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700/50 shadow-xl">
+    <div className="min-h-screen" style={{ background: "var(--bg-deep)" }}>
+      <div className="fixed inset-0 mesh-grid opacity-20 pointer-events-none" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-96 h-48 rounded-full opacity-10 pointer-events-none"
+           style={{ background: "radial-gradient(ellipse, #6366f1, transparent)", filter: "blur(60px)" }} />
+
+      <header className="relative z-10 glass border-b border-white/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4 sm:py-6">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl lg:rounded-2xl shadow-lg">
-                <RefreshCw className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />
+          <div className="flex items-center justify-between h-16">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
+                <Wifi className="h-4 w-4 text-white" />
               </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
-                  Refund Policy
-                </h1>
-                <p className="text-slate-400 text-xs sm:text-sm hidden sm:block">
-                  ReadyWifi Refund Guidelines
-                </p>
-              </div>
-            </div>
-            <Link
-              href="/"
-              className="flex items-center px-3 sm:px-4 py-2 sm:py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all duration-300 border border-slate-600/50 hover:border-cyan-500/50"
-            >
-              <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-              <span className="text-sm sm:text-base">Back to Home</span>
+              <span className="text-sm font-bold text-white">ReadyWifi</span>
+            </Link>
+            <Link href="/" className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group">
+              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />Back to Home
             </Link>
           </div>
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 sm:p-8 lg:p-12">
-          <div className="mb-8">
-            <div className="flex items-center mb-4">
-              <RefreshCw className="h-6 w-6 text-cyan-400 mr-3" />
-              <h2 className="text-2xl font-bold text-white">Refund Policy</h2>
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 mb-5 shadow-xl shadow-amber-500/20">
+            <RefreshCw className="h-7 w-7 text-white" />
+          </div>
+          <h1 className="text-4xl font-bold text-white mb-3">Refund Policy</h1>
+          <p className="text-slate-400 text-sm">Last updated: {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
+        </div>
+
+        <div className="space-y-6">
+          {/* Important notice */}
+          <div className="rounded-2xl p-5 border border-amber-500/25" style={{ background: "rgba(234,179,8,0.07)" }}>
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-amber-300 mb-1">Important Notice</p>
+                <p className="text-xs text-slate-400">All sales are generally final once a voucher code has been delivered. Refunds are only available under specific circumstances outlined below.</p>
+              </div>
             </div>
-            <p className="text-slate-400 text-sm sm:text-base">
-              Last updated: {new Date().toLocaleDateString()}
-            </p>
           </div>
 
-          <div className="space-y-8">
-            {/* Section 1 */}
-            <section>
-              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                General Refund Policy
-              </h3>
-              <p className="text-slate-300 leading-relaxed mb-4">
-                At ReadyWifi, we strive to provide excellent service and
-                customer satisfaction. However, due to the digital nature of our
-                WiFi voucher services, we have specific refund policies in
-                place.
-              </p>
-              <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4">
-                <div className="flex items-center mb-2">
-                  <AlertTriangle className="h-5 w-5 text-amber-400 mr-2" />
-                  <span className="text-amber-400 font-semibold">
-                    Important Notice
-                  </span>
+          {/* When refunds ARE available */}
+          <div className="glass-strong rounded-2xl border border-white/6 p-6">
+            <h2 className="flex items-center gap-2.5 text-base font-semibold text-white mb-5">
+              <CheckCircle className="h-4 w-4 text-green-400" />When Refunds Are Available
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { title: "Technical Issues", desc: "If you can't use your voucher due to a technical fault and our support team can't resolve it within 24 hours." },
+                { title: "Duplicate Payment", desc: "If you were charged multiple times for the same purchase due to a system error on our end." },
+                { title: "Wrong Plan", desc: "If you accidentally purchased the wrong plan and contact us within 1 hour before using the voucher." },
+                { title: "Service Unavailable", desc: "If the WiFi service is completely unavailable in the coverage area and this wasn't disclosed at purchase." },
+              ].map(r => (
+                <div key={r.title} className="rounded-xl p-4 border border-green-500/20 flex gap-3" style={{ background: "rgba(34,197,94,0.07)" }}>
+                  <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold text-green-400 mb-1">{r.title}</p>
+                    <p className="text-xs text-slate-400">{r.desc}</p>
+                  </div>
                 </div>
-                <p className="text-amber-300 text-sm">
-                  All sales are generally final once a voucher code has been
-                  delivered. Refunds are only available under specific
-                  circumstances as outlined below.
-                </p>
-              </div>
-            </section>
-
-            {/* Section 2 */}
-            <section>
-              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                When Refunds Are Available
-              </h3>
-              <div className="space-y-4">
-                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                  <h4 className="text-green-400 font-semibold mb-2">
-                    ✅ Technical Issues
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    If you experience technical difficulties that prevent you
-                    from using your voucher code, and our support team cannot
-                    resolve the issue within 24 hours.
-                  </p>
-                </div>
-
-                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                  <h4 className="text-green-400 font-semibold mb-2">
-                    ✅ Duplicate Payment
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    If you were charged multiple times for the same purchase due
-                    to a system error on our end.
-                  </p>
-                </div>
-
-                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                  <h4 className="text-green-400 font-semibold mb-2">
-                    ✅ Wrong Plan Purchased
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    If you accidentally purchased the wrong data plan and
-                    contact us within 1 hour of purchase before using the
-                    voucher code.
-                  </p>
-                </div>
-
-                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                  <h4 className="text-green-400 font-semibold mb-2">
-                    ✅ Service Unavailable
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    If the WiFi service is completely unavailable in your area
-                    and this was not disclosed at the time of purchase.
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            {/* Section 3 */}
-            <section>
-              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                <XCircle className="h-5 w-5 text-red-400 mr-2" />
-                When Refunds Are NOT Available
-              </h3>
-              <div className="space-y-4">
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-                  <h4 className="text-red-400 font-semibold mb-2">
-                    ❌ Voucher Code Used
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    Once a voucher code has been used or activated, no refunds
-                    will be provided.
-                  </p>
-                </div>
-
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-                  <h4 className="text-red-400 font-semibold mb-2">
-                    ❌ Change of Mind
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    Refunds are not available simply because you changed your
-                    mind after purchase.
-                  </p>
-                </div>
-
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-                  <h4 className="text-red-400 font-semibold mb-2">
-                    ❌ Slow Internet Speed
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    Refunds are not available due to slow internet speeds, as
-                    this is dependent on various factors beyond our control.
-                  </p>
-                </div>
-
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-                  <h4 className="text-red-400 font-semibold mb-2">
-                    ❌ Expired Voucher
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    Refunds are not available for expired voucher codes that
-                    were not used within the validity period.
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            {/* Section 4 */}
-            <section>
-              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                <Clock className="h-5 w-5 text-blue-400 mr-2" />
-                Refund Process
-              </h3>
-              <div className="space-y-4">
-                <div className="bg-slate-700/50 rounded-lg p-4">
-                  <h4 className="text-white font-semibold mb-2">
-                    Step 1: Contact Support
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    Email us at mrselasi@gmail.com with your order details and
-                    reason for refund request.
-                  </p>
-                </div>
-
-                <div className="bg-slate-700/50 rounded-lg p-4">
-                  <h4 className="text-white font-semibold mb-2">
-                    Step 2: Investigation
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    Our team will investigate your request within 24-48 hours
-                    and verify the circumstances.
-                  </p>
-                </div>
-
-                <div className="bg-slate-700/50 rounded-lg p-4">
-                  <h4 className="text-white font-semibold mb-2">
-                    Step 3: Processing
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    If approved, refunds will be processed within 3-7 business
-                    days to your original payment method.
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            {/* Section 5 */}
-            <section>
-              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                Refund Timeline
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-slate-700/30 rounded-lg p-4">
-                  <h4 className="text-cyan-400 font-semibold mb-2">
-                    Processing Time
-                  </h4>
-                  <p className="text-slate-300 text-sm">3-7 business days</p>
-                </div>
-                <div className="bg-slate-700/30 rounded-lg p-4">
-                  <h4 className="text-cyan-400 font-semibold mb-2">
-                    Request Deadline
-                  </h4>
-                  <p className="text-slate-300 text-sm">
-                    Within 7 days of purchase
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            {/* Section 6 */}
-            <section>
-              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                Contact Information
-              </h3>
-              <p className="text-slate-300 leading-relaxed mb-4">
-                For refund requests or questions about this policy, please
-                contact us:
-              </p>
-              <div className="bg-slate-700/50 rounded-lg p-4">
-                <p className="text-slate-300">
-                  <strong>Email:</strong> mrselasi@gmail.com
-                  <br />
-                  <strong>Phone:</strong> +233 55 521 8254
-                  <br />
-                  <strong>Response Time:</strong> Within 24 hours
-                  <br />
-                  <strong>Business Hours:</strong> Monday - Friday, 8:00 AM -
-                  6:00 PM GMT
-                </p>
-              </div>
-            </section>
-
-            {/* Section 7 */}
-            <section>
-              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                Policy Updates
-              </h3>
-              <p className="text-slate-300 leading-relaxed">
-                We reserve the right to update this refund policy at any time.
-                Changes will be posted on this page with an updated revision
-                date. Continued use of our services after changes constitutes
-                acceptance of the new policy.
-              </p>
-            </section>
+              ))}
+            </div>
           </div>
 
-          <div className="mt-12 pt-8 border-t border-slate-700/50">
-            <p className="text-slate-400 text-sm text-center">
-              This refund policy is effective as of{" "}
-              {new Date().toLocaleDateString()} and applies to all ReadyWifi
-              services.
-            </p>
+          {/* When refunds are NOT available */}
+          <div className="glass-strong rounded-2xl border border-white/6 p-6">
+            <h2 className="flex items-center gap-2.5 text-base font-semibold text-white mb-5">
+              <XCircle className="h-4 w-4 text-red-400" />When Refunds Are NOT Available
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { title: "Voucher Already Used", desc: "Once a voucher code has been activated, no refunds will be provided under any circumstances." },
+                { title: "Change of Mind", desc: "Refunds are not issued simply because you changed your mind after purchase." },
+                { title: "Slow Internet Speed", desc: "Speed depends on factors outside our control (congestion, device, location)." },
+                { title: "Expired Voucher", desc: "Vouchers not used within the 30-day validity period are not refundable." },
+              ].map(r => (
+                <div key={r.title} className="rounded-xl p-4 border border-red-500/20 flex gap-3" style={{ background: "rgba(239,68,68,0.07)" }}>
+                  <XCircle className="h-4 w-4 text-red-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold text-red-400 mb-1">{r.title}</p>
+                    <p className="text-xs text-slate-400">{r.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Refund process */}
+          <div className="glass-strong rounded-2xl border border-white/6 p-6">
+            <h2 className="flex items-center gap-2.5 text-base font-semibold text-white mb-5">
+              <Clock className="h-4 w-4 text-blue-400" />Refund Process
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { step: "01", title: "Contact Support", desc: "Email mrselasi@gmail.com with your order details and reason.", color: "from-blue-500 to-indigo-600" },
+                { step: "02", title: "Investigation", desc: "Our team reviews your request within 24–48 hours.", color: "from-indigo-500 to-violet-600" },
+                { step: "03", title: "Processing", desc: "If approved, refunds are processed to your original payment method within 3–7 business days.", color: "from-violet-500 to-fuchsia-600" },
+              ].map(s => (
+                <div key={s.step} className="text-center p-4 rounded-xl border border-white/5" style={{ background: "rgba(255,255,255,0.03)" }}>
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white text-sm font-bold mx-auto mb-3`}>{s.step}</div>
+                  <h3 className="text-sm font-semibold text-white mb-1.5">{s.title}</h3>
+                  <p className="text-xs text-slate-400">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-4">
+              <div className="rounded-xl p-4 border border-white/5 text-center" style={{ background: "rgba(255,255,255,0.03)" }}>
+                <p className="text-xs text-slate-500 mb-1">Processing Time</p>
+                <p className="text-sm font-semibold text-white">3–7 business days</p>
+              </div>
+              <div className="rounded-xl p-4 border border-white/5 text-center" style={{ background: "rgba(255,255,255,0.03)" }}>
+                <p className="text-xs text-slate-500 mb-1">Request Deadline</p>
+                <p className="text-sm font-semibold text-white">Within 7 days of purchase</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact */}
+          <div className="glass-strong rounded-2xl border border-white/6 p-6">
+            <h2 className="text-base font-semibold text-white mb-4">Get In Touch</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[{ label: "Email", val: "mrselasi@gmail.com" }, { label: "Phone", val: "+233 55 521 8254" }, { label: "Response", val: "Within 24 hours" }, { label: "Hours", val: "Mon–Fri, 8am–6pm" }].map(c => (
+                <div key={c.label} className="rounded-xl p-3" style={{ background: "rgba(255,255,255,0.03)" }}>
+                  <p className="text-xs text-slate-500 mb-1">{c.label}</p>
+                  <p className="text-xs text-slate-300 font-medium">{c.val}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10 p-5 rounded-2xl text-center border border-white/6" style={{ background: "rgba(99,102,241,0.06)" }}>
+          <p className="text-slate-400 text-sm">This refund policy applies to all ReadyWifi purchases.</p>
+          <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs">
+            {[{ label: "Terms & Conditions", href: "/terms" }, { label: "Privacy Policy", href: "/privacy" }, { label: "FAQ", href: "/faq" }].map(l => (
+              <Link key={l.href} href={l.href} className="text-indigo-400 hover:text-indigo-300 transition-colors">{l.label}</Link>
+            ))}
           </div>
         </div>
       </div>
