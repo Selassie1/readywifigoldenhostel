@@ -24,7 +24,7 @@ interface SalesListResponse {
 export default function SalesListPage() {
   const [data, setData]           = useState<SalesListResponse | null>(null);
   const [loading, setLoading]     = useState(true);
-  const [filters, setFilters]     = useState({ plan: "", status: "", channel: "", startDate: "", endDate: "", page: 1 });
+  const [filters, setFilters]     = useState({ plan: "", status: "", channel: "", startDate: "", endDate: "", month: "", page: 1 });
   const [showFilters, setShowFilters] = useState(false);
   const [resendingSms, setResendingSms] = useState<string | null>(null);
   const [deletingOrder, setDeletingOrder] = useState<string | null>(null);
@@ -71,6 +71,17 @@ export default function SalesListPage() {
   const getPlanName = (plan: string) => ({ basic: "Basic", pro: "Pro", unlimited: "Unlimited" }[plan] || plan);
 
   const formatDate = (d: string) => new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+  const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  const selectMonth = (idx: number) => {
+    const year = new Date().getFullYear();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const lastDay = new Date(year, idx + 1, 0).getDate();
+    setFilters({ ...filters, month: String(idx), startDate: `${year}-${pad(idx + 1)}-01`, endDate: `${year}-${pad(idx + 1)}-${pad(lastDay)}`, page: 1 });
+  };
+
+  const clearMonth = () => setFilters({ ...filters, month: "", startDate: "", endDate: "", page: 1 });
 
   const statusColors: Record<string, string> = {
     completed: "bg-green-500/15 text-green-400 border-green-500/25",
@@ -121,8 +132,8 @@ export default function SalesListPage() {
             {[
               { label: "All Sales",      sub: "Total transactions", val: data.summary.totalSales,    icon: <ShoppingCart className="h-4 w-4 text-amber-400" />,  glow: "rgba(251,191,36,0.12)" },
               { label: "Completed",      sub: "Successfully paid",  val: data.summary.paidSales,     icon: <CheckCircle className="h-4 w-4 text-green-400" />,   glow: "rgba(34,197,94,0.1)" },
-              { label: "Total Revenue",  sub: "All transactions",   val: `GHS ${data.summary.totalRevenue}`, icon: <DollarSign className="h-4 w-4 text-indigo-400" />,  glow: "rgba(99,102,241,0.1)" },
-              { label: "Paid Revenue",   sub: "Completed only",     val: `GHS ${data.summary.paidRevenue}`,  icon: <TrendingUp className="h-4 w-4 text-violet-400" />, glow: "rgba(139,92,246,0.1)" },
+              { label: "Total Revenue",  sub: "Net of Paystack fees",   val: `GHS ${data.summary.totalRevenue}`, icon: <DollarSign className="h-4 w-4 text-indigo-400" />,  glow: "rgba(99,102,241,0.1)" },
+              { label: "Paid Revenue",   sub: "Completed, net of fees",  val: `GHS ${data.summary.paidRevenue}`,  icon: <TrendingUp className="h-4 w-4 text-violet-400" />, glow: "rgba(139,92,246,0.1)" },
             ].map((c, i) => (
               <div key={i} className="glass-strong rounded-2xl border border-white/6 p-4">
                 <div className="flex items-start justify-between mb-3">
@@ -188,13 +199,31 @@ export default function SalesListPage() {
                   ))}
                 </div>
               </div>
+              {/* Month quick-filter */}
+              <div>
+                <label className="block text-[11px] text-slate-500 mb-2">Month ({new Date().getFullYear()})</label>
+                <div className="flex flex-wrap gap-2">
+                  <button onClick={clearMonth}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${filters.month === "" && !filters.startDate ? "bg-indigo-600 text-white" : "text-slate-400 border border-white/8 hover:text-white"}`}
+                    style={filters.month !== "" || filters.startDate ? { background: "rgba(255,255,255,0.04)" } : {}}>
+                    All
+                  </button>
+                  {MONTHS.map((m, idx) => (
+                    <button key={m} onClick={() => selectMonth(idx)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${filters.month === String(idx) ? "bg-indigo-600 text-white" : "text-slate-400 border border-white/8 hover:text-white"}`}
+                      style={filters.month !== String(idx) ? { background: "rgba(255,255,255,0.04)" } : {}}>
+                      {m}
+                    </button>
+                  ))}
+                </div>
+              </div>
               {/* Date range */}
               <div>
-                <label className="block text-[11px] text-slate-500 mb-2">Date Range</label>
+                <label className="block text-[11px] text-slate-500 mb-2">Custom Date Range</label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { val: filters.startDate, onChange: (v: string) => setFilters({ ...filters, startDate: v, page: 1 }) },
-                    { val: filters.endDate,   onChange: (v: string) => setFilters({ ...filters, endDate:   v, page: 1 }) },
+                    { val: filters.startDate, onChange: (v: string) => setFilters({ ...filters, startDate: v, month: "", page: 1 }) },
+                    { val: filters.endDate,   onChange: (v: string) => setFilters({ ...filters, endDate:   v, month: "", page: 1 }) },
                   ].map((d, i) => (
                     <div key={i} className="relative">
                       <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-600" />

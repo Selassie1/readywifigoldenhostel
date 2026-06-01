@@ -42,18 +42,26 @@ export async function GET(request: NextRequest) {
     const total = await Sale.countDocuments(filter);
 
     // Get summary stats
+    // Revenue excludes Paystack's 1.95% fee — net received = amount × 0.9805
+    const PAYSTACK_NET_RATE = 0.9805;
     const stats = await Sale.aggregate([
       { $match: filter },
       {
         $group: {
           _id: null,
           totalSales: { $sum: 1 },
-          totalRevenue: { $sum: "$amount" },
+          totalRevenue: { $sum: { $multiply: ["$amount", PAYSTACK_NET_RATE] } },
           paidSales: {
             $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] },
           },
           paidRevenue: {
-            $sum: { $cond: [{ $eq: ["$status", "completed"] }, "$amount", 0] },
+            $sum: {
+              $cond: [
+                { $eq: ["$status", "completed"] },
+                { $multiply: ["$amount", PAYSTACK_NET_RATE] },
+                0,
+              ],
+            },
           },
         },
       },
@@ -78,7 +86,7 @@ export async function GET(request: NextRequest) {
       {
         $group: {
           _id: "$plan",
-          value: { $sum: "$amount" }
+          value: { $sum: { $multiply: ["$amount", PAYSTACK_NET_RATE] } }
         }
       }
     ]);
